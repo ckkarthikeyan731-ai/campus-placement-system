@@ -7,10 +7,10 @@ Desktop application for managing student placement records, built with Java Swin
 
 ## Features
 
-- Dashboard KPIs for student totals, placed / not placed counts, average placed package, and top placed package.
+- Dashboard KPIs for student totals, placed / not placed / in-progress counts, average placed package, top placed package, and overall placement rate.
 - Search, department/status filters, and sortable placement records.
-- Add, update, and delete records with validation and delete confirmation.
-- Export the current table view to CSV.
+- Add, update, and delete records with validation and delete confirmation; the form scrolls on shorter screens so every action remains reachable.
+- Refresh table data and export the current table view to CSV.
 - Login screen, live clock, and status feedback.
 - Responsive Swing layout; no additional Java packages or build tools required.
 

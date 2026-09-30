@@ -86,7 +86,7 @@ public class CampusPlacementSystem extends JFrame {
     private JComboBox<String> filterDept, filterStatus;
 
     // ─── KPI labels ───────────────────────────────────────────
-    private JLabel kpiTotal, kpiPlaced, kpiNot, kpiAvg, kpiTop;
+    private JLabel kpiTotal, kpiPlaced, kpiNot, kpiInProgress, kpiAvg, kpiTop;
     private JLabel kpiPlacementRate;
     private JProgressBar kpiPlacementProgress;
 
@@ -149,7 +149,7 @@ public class CampusPlacementSystem extends JFrame {
         super("Campus Placement Management System — St. Joseph's College of Engineering");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1366, 860);
-        setMinimumSize(new Dimension(1100, 700));
+        setMinimumSize(new Dimension(1000, 620));
         setLocationRelativeTo(null);
         setIconImage(PlacementUi.buildIcon());
 
@@ -453,19 +453,21 @@ public class CampusPlacementSystem extends JFrame {
 
     // ── KPI Row ───────────────────────────────────────────────
     private JPanel buildKpiRow() {
-        JPanel row = new JPanel(new GridLayout(1, 5, 12, 0));
+        JPanel row = new JPanel(new GridLayout(1, 6, 10, 0));
         row.setBackground(C_CARD);
         row.setBorder(new EmptyBorder(14, 18, 12, 18));
 
         kpiTotal  = new JLabel("—");
         kpiPlaced = new JLabel("—");
         kpiNot    = new JLabel("—");
+        kpiInProgress = new JLabel("—");
         kpiAvg    = new JLabel("—");
         kpiTop    = new JLabel("—");
 
         row.add(mkKpiCard("Total Students", kpiTotal,  "👥", C_INDIGO,  new Color(238, 242, 255)));
         row.add(mkKpiCard("Placed",         kpiPlaced, "✅", C_GREEN,   new Color(240, 253, 244)));
         row.add(mkKpiCard("Not Placed",     kpiNot,    "❌", C_RED,     new Color(254, 242, 242)));
+        row.add(mkKpiCard("In Progress", kpiInProgress, "⏳", C_TEAL,    new Color(236, 254, 255)));
         row.add(mkKpiCard("Avg Placed Package", kpiAvg, "💰", C_AMBER,  new Color(255, 251, 235)));
         row.add(mkKpiCard("Top Placed Package", kpiTop, "🏆", C_PURPLE, new Color(250, 245, 255)));
         return row;
@@ -531,11 +533,11 @@ public class CampusPlacementSystem extends JFrame {
 
     // ── Sidebar Form ──────────────────────────────────────────
     private JPanel buildFormPanel() {
-        JPanel sb = new JPanel();
-        sb.setBackground(C_SIDEBAR);
-        sb.setLayout(new BoxLayout(sb, BoxLayout.Y_AXIS));
-        sb.setBorder(new EmptyBorder(20, 18, 18, 18));
-        sb.setPreferredSize(new Dimension(388, 0));
+        JPanel formContent = new JPanel();
+        formContent.setBackground(C_SIDEBAR);
+        formContent.setLayout(new BoxLayout(formContent, BoxLayout.Y_AXIS));
+        formContent.setBorder(new EmptyBorder(20, 18, 18, 18));
+        formContent.setPreferredSize(new Dimension(360, 620));
 
         lblFormHead = new JLabel("➕  Add New Record");
         lblFormHead.setFont(F_HEAD);
@@ -545,33 +547,33 @@ public class CampusPlacementSystem extends JFrame {
         JSeparator sep = new JSeparator();
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
         sep.setForeground(new Color(40, 46, 56));
-        sb.add(lblFormHead);
-        sb.add(Box.createVerticalStrut(8));
-        sb.add(sep);
-        sb.add(Box.createVerticalStrut(16));
+        formContent.add(lblFormHead);
+        formContent.add(Box.createVerticalStrut(8));
+        formContent.add(sep);
+        formContent.add(Box.createVerticalStrut(16));
 
         // Fields
-        sb.add(PlacementUi.mkDkLabel("Student Name")); sb.add(Box.createVerticalStrut(4));
-        fName = PlacementUi.mkDkField(); sb.add(fName); sb.add(Box.createVerticalStrut(11));
+        formContent.add(PlacementUi.mkDkLabel("Student Name")); formContent.add(Box.createVerticalStrut(4));
+        fName = PlacementUi.mkDkField(); formContent.add(fName); formContent.add(Box.createVerticalStrut(11));
 
-        sb.add(PlacementUi.mkDkLabel("Roll Number")); sb.add(Box.createVerticalStrut(4));
-        fRoll = PlacementUi.mkDkField(); sb.add(fRoll); sb.add(Box.createVerticalStrut(11));
+        formContent.add(PlacementUi.mkDkLabel("Roll Number")); formContent.add(Box.createVerticalStrut(4));
+        fRoll = PlacementUi.mkDkField(); formContent.add(fRoll); formContent.add(Box.createVerticalStrut(11));
 
-        sb.add(PlacementUi.mkDkLabel("Department")); sb.add(Box.createVerticalStrut(4));
-        fDept = PlacementUi.mkDkField(); sb.add(fDept); sb.add(Box.createVerticalStrut(11));
+        formContent.add(PlacementUi.mkDkLabel("Department")); formContent.add(Box.createVerticalStrut(4));
+        fDept = PlacementUi.mkDkField(); formContent.add(fDept); formContent.add(Box.createVerticalStrut(11));
 
-        sb.add(PlacementUi.mkDkLabel("Company")); sb.add(Box.createVerticalStrut(4));
-        fCompany = PlacementUi.mkDkField(); sb.add(fCompany); sb.add(Box.createVerticalStrut(11));
+        formContent.add(PlacementUi.mkDkLabel("Company")); formContent.add(Box.createVerticalStrut(4));
+        fCompany = PlacementUi.mkDkField(); formContent.add(fCompany); formContent.add(Box.createVerticalStrut(11));
 
-        sb.add(PlacementUi.mkDkLabel("Placement Status")); sb.add(Box.createVerticalStrut(4));
+        formContent.add(PlacementUi.mkDkLabel("Placement Status")); formContent.add(Box.createVerticalStrut(4));
         cbStatus = new JComboBox<>(new String[]{"Placed", "Not Placed", "In Process", "On Hold"});
         PlacementUi.styleCombo(cbStatus);
-        sb.add(cbStatus);
-        sb.add(Box.createVerticalStrut(11));
+        formContent.add(cbStatus);
+        formContent.add(Box.createVerticalStrut(11));
 
-        sb.add(PlacementUi.mkDkLabel("Package (LPA)")); sb.add(Box.createVerticalStrut(4));
-        fPkg = PlacementUi.mkDkField(); sb.add(fPkg);
-        sb.add(Box.createVerticalStrut(20));
+        formContent.add(PlacementUi.mkDkLabel("Package (LPA)")); formContent.add(Box.createVerticalStrut(4));
+        fPkg = PlacementUi.mkDkField(); formContent.add(fPkg);
+        formContent.add(Box.createVerticalStrut(20));
 
         // 2x2 button grid
         JPanel btnGrid = new JPanel(new GridLayout(2, 2, 8, 8));
@@ -588,14 +590,14 @@ public class CampusPlacementSystem extends JFrame {
         btnGrid.add(btnUpdate);
         btnGrid.add(btnDelete);
         btnGrid.add(btnClear);
-        sb.add(btnGrid);
+        formContent.add(btnGrid);
 
         // Export button
-        sb.add(Box.createVerticalStrut(10));
+        formContent.add(Box.createVerticalStrut(10));
         JButton btnExport = PlacementUi.mkBtn("📥  Export to CSV", C_TEAL, C_TEAL2);
         btnExport.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnExport.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
-        sb.add(btnExport);
+        formContent.add(btnExport);
 
         // Actions
         btnAdd.addActionListener(e    -> doAdd());
@@ -604,7 +606,19 @@ public class CampusPlacementSystem extends JFrame {
         btnClear.addActionListener(e  -> clearForm());
         btnExport.addActionListener(e -> exportCSV());
 
-        return sb;
+        JScrollPane formScroll = new JScrollPane(formContent,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        formScroll.setBorder(null);
+        formScroll.setBackground(C_SIDEBAR);
+        formScroll.getViewport().setBackground(C_SIDEBAR);
+        formScroll.getVerticalScrollBar().setUnitIncrement(18);
+
+        JPanel formPanel = new JPanel(new BorderLayout());
+        formPanel.setBackground(C_SIDEBAR);
+        formPanel.setPreferredSize(new Dimension(388, 0));
+        formPanel.add(formScroll, BorderLayout.CENTER);
+        return formPanel;
     }
 
     // ── Table Panel ───────────────────────────────────────────
@@ -795,7 +809,7 @@ public class CampusPlacementSystem extends JFrame {
         String sql = "SELECT id,student_name,roll_no,department,company,status,package_lpa " +
                      "FROM placement_records ORDER BY id";
         java.util.List<Object[]> records = new ArrayList<>();
-        int total = 0, placed = 0, notPlaced = 0;
+        int total = 0, placed = 0, notPlaced = 0, inProgress = 0;
         double placedPkg = 0, topPlacedPkg = 0;
         try (Connection c = conn();
              PreparedStatement ps = c.prepareStatement(sql);
@@ -817,19 +831,22 @@ public class CampusPlacementSystem extends JFrame {
                     if (pkg > topPlacedPkg) topPlacedPkg = pkg;
                 } else if ("Not Placed".equalsIgnoreCase(st)) {
                     notPlaced++;
+                } else if ("In Process".equalsIgnoreCase(st) || "On Hold".equalsIgnoreCase(st)) {
+                    inProgress++;
                 }
             }
             tableModel.setRowCount(0);
             for (Object[] record : records) {
                 tableModel.addRow(record);
             }
-            final int    T  = total, PL = placed, NP = notPlaced;
+            final int    T = total, PL = placed, NP = notPlaced, IP = inProgress;
             final String AV = placed > 0 ? String.format("%.1f", placedPkg / placed) + " LPA" : "—";
             final String TP = topPlacedPkg > 0 ? String.format("%.1f", topPlacedPkg) + " LPA" : "—";
             SwingUtilities.invokeLater(() -> {
                 kpiTotal.setText(String.valueOf(T));
                 kpiPlaced.setText(String.valueOf(PL));
                 kpiNot.setText(String.valueOf(NP));
+                kpiInProgress.setText(String.valueOf(IP));
                 kpiAvg.setText(AV);
                 kpiTop.setText(TP);
                 int placementRate = T > 0 ? (int) Math.round(PL * 100.0 / T) : 0;

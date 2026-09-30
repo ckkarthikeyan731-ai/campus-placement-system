@@ -87,6 +87,8 @@ public class CampusPlacementSystem extends JFrame {
 
     // ─── KPI labels ───────────────────────────────────────────
     private JLabel kpiTotal, kpiPlaced, kpiNot, kpiAvg, kpiTop;
+    private JLabel kpiPlacementRate;
+    private JProgressBar kpiPlacementProgress;
 
     // ─── Status bar ───────────────────────────────────────────
     private JLabel lblStatus;
@@ -338,7 +340,7 @@ public class CampusPlacementSystem extends JFrame {
 
         JPanel body = new JPanel(new BorderLayout());
         body.setBackground(C_CARD);
-        body.add(buildKpiRow(),   BorderLayout.NORTH);
+        body.add(buildOverviewSection(), BorderLayout.NORTH);
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 buildFormPanel(), buildTablePanel());
@@ -349,6 +351,39 @@ public class CampusPlacementSystem extends JFrame {
         body.add(split, BorderLayout.CENTER);
         root.add(body, BorderLayout.CENTER);
         return root;
+    }
+
+    private JPanel buildOverviewSection() {
+        JPanel overview = new JPanel();
+        overview.setOpaque(true);
+        overview.setBackground(C_CARD);
+        overview.setLayout(new BoxLayout(overview, BoxLayout.Y_AXIS));
+
+        JPanel heading = new JPanel(new BorderLayout(12, 0));
+        heading.setOpaque(false);
+        heading.setBorder(new EmptyBorder(12, 20, 0, 20));
+
+        JPanel copy = new JPanel();
+        copy.setOpaque(false);
+        copy.setLayout(new BoxLayout(copy, BoxLayout.Y_AXIS));
+        JLabel title = new JLabel("Placement overview");
+        title.setFont(new Font("Segoe UI", Font.BOLD, 17));
+        title.setForeground(C_DARK_TXT);
+        JLabel subtitle = new JLabel("A live snapshot of student recruiting outcomes");
+        subtitle.setFont(F_SMALL);
+        subtitle.setForeground(C_MUTED);
+        copy.add(title);
+        copy.add(Box.createVerticalStrut(2));
+        copy.add(subtitle);
+
+        JLabel liveBadge = PlacementUi.makeTagBadge(
+                "LIVE OVERVIEW", C_GREEN2, new Color(240, 253, 244), new Color(187, 247, 208));
+        heading.add(copy, BorderLayout.WEST);
+        heading.add(liveBadge, BorderLayout.EAST);
+
+        overview.add(heading);
+        overview.add(buildKpiRow());
+        return overview;
     }
 
     // ── Header ───────────────────────────────────────────────
@@ -395,7 +430,7 @@ public class CampusPlacementSystem extends JFrame {
     private JPanel buildKpiRow() {
         JPanel row = new JPanel(new GridLayout(1, 5, 12, 0));
         row.setBackground(C_CARD);
-        row.setBorder(new EmptyBorder(14, 14, 10, 14));
+        row.setBorder(new EmptyBorder(14, 18, 12, 18));
 
         kpiTotal  = new JLabel("—");
         kpiPlaced = new JLabel("—");
@@ -416,30 +451,56 @@ public class CampusPlacementSystem extends JFrame {
         card.setBackground(C_SURFACE);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(226, 232, 240), 1, true),
-                new EmptyBorder(14, 14, 14, 14)));
+                new EmptyBorder(13, 13, 13, 13)));
+        card.setToolTipText(title + " placement metric");
 
         // Icon circle
         JLabel icoLbl = new JLabel(icon, SwingConstants.CENTER);
         icoLbl.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
         JPanel icoBox = new JPanel(new GridBagLayout());
         icoBox.setBackground(iconBg);
-        icoBox.setPreferredSize(new Dimension(50, 50));
-        icoBox.setBorder(BorderFactory.createLineBorder(accent, 1, true));
+        icoBox.setPreferredSize(new Dimension(48, 48));
+        icoBox.setBorder(BorderFactory.createLineBorder(new Color(
+                accent.getRed(), accent.getGreen(), accent.getBlue(), 80), 1, true));
         icoBox.add(icoLbl);
 
         JPanel info = new JPanel();
         info.setOpaque(false);
         info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
-        valLbl.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        valLbl.setFont(new Font("Segoe UI", Font.BOLD, 25));
         valLbl.setForeground(accent);
         JLabel titleLbl = new JLabel(title);
         titleLbl.setFont(F_SMALL);
-        titleLbl.setForeground(C_MUTED);
+        titleLbl.setForeground(new Color(100, 110, 122));
         info.add(valLbl);
         info.add(titleLbl);
+        if ("Placed".equals(title)) {
+            JPanel placementDetails = new JPanel();
+            placementDetails.setOpaque(false);
+            placementDetails.setLayout(new BoxLayout(placementDetails, BoxLayout.Y_AXIS));
+            kpiPlacementProgress = new JProgressBar(0, 100);
+            kpiPlacementProgress.setMaximumSize(new Dimension(Integer.MAX_VALUE, 5));
+            kpiPlacementProgress.setPreferredSize(new Dimension(100, 5));
+            kpiPlacementProgress.setBorderPainted(false);
+            kpiPlacementProgress.setBackground(new Color(226, 232, 240));
+            kpiPlacementProgress.setForeground(accent);
+            kpiPlacementProgress.setStringPainted(false);
+            kpiPlacementRate = new JLabel("— of students");
+            kpiPlacementRate.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+            kpiPlacementRate.setForeground(C_MUTED);
+            placementDetails.add(Box.createVerticalStrut(5));
+            placementDetails.add(kpiPlacementProgress);
+            placementDetails.add(Box.createVerticalStrut(3));
+            placementDetails.add(kpiPlacementRate);
+            info.add(placementDetails);
+        }
 
         card.add(icoBox, BorderLayout.WEST);
         card.add(info,   BorderLayout.CENTER);
+        JPanel accentRule = new JPanel();
+        accentRule.setBackground(accent);
+        accentRule.setPreferredSize(new Dimension(0, 3));
+        card.add(accentRule, BorderLayout.NORTH);
         return card;
     }
 
@@ -736,6 +797,9 @@ public class CampusPlacementSystem extends JFrame {
                 kpiNot.setText(String.valueOf(NP));
                 kpiAvg.setText(AV);
                 kpiTop.setText(TP);
+                int placementRate = T > 0 ? (int) Math.round(PL * 100.0 / T) : 0;
+                kpiPlacementProgress.setValue(placementRate);
+                kpiPlacementRate.setText(placementRate + "% of students placed");
                 if (lblStatus != null) lblStatus.setText("  " + T + " total record(s)");
             });
         } catch (SQLException ex) {

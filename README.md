@@ -24,25 +24,41 @@ Package KPIs use records with status **Placed**. Search and filters change the t
 
 ## Setup
 
-1. Create the database and sample records by running `database_setup.sql` in MySQL:
+1. Clone the repository and change into its folder. In Command Prompt:
+
+   ```cmd
+   git clone https://github.com/ckkarthikeyan731-ai/campus-placement-system.git
+   cd /d campus-placement-system
+   ```
+
+   If you already cloned it, `cd /d` to that clone's `campus-placement-system` folder instead. `run.bat` must be launched from that folder, or by giving Windows its full path.
+
+2. Create the database and sample records from the project folder:
 
    ```cmd
    mysql -u root -p < database_setup.sql
    ```
 
-2. Configure database connection variables if your local MySQL settings differ. In Command Prompt, set them before launching:
+   Enter your MySQL password when prompted. If `mysql` is not recognized, open MySQL Command Line Client or add the MySQL `bin` folder to `PATH`, then run this command again.
+
+3. Configure the app's database connection in the same Command Prompt window:
 
    ```cmd
    set CPS_DB_USER=root
    set CPS_DB_PASS=your_mysql_password
+   ```
+
+   Replace the example with your MySQL password. Optionally set `CPS_DB_URL` to override the default JDBC URL. These variables are read by the application and are not stored in source control.
+
+4. Start the app from the repository folder:
+
+   ```cmd
    run.bat
    ```
 
-   Optionally set `CPS_DB_URL` to override the default JDBC URL. These variables are read by the application and are not stored in source control.
+   This compiles the Java source and opens the desktop application. If you are not in the repository folder, run the batch file using its full path instead.
 
-3. Run `run.bat`. It compiles the source and starts the application from its own project folder.
-
-4. Sign in with the development account created by the SQL script:
+5. Sign in with the development account created by the SQL script:
 
    | Username | Password |
    |----------|----------|

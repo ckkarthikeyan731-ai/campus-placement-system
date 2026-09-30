@@ -33,7 +33,7 @@ if not exist "%LIB%" (
 
 REM ── Compile
 echo [1/2] Compiling...
-javac -encoding UTF-8 -cp "%LIB%" -d "%OUT_DIR%" "%SRC%"
+javac -encoding UTF-8 -cp "%LIB%" -sourcepath "%BASE%src" -d "%OUT_DIR%" "%SRC%"
 if errorlevel 1 (
     echo [ERROR] Compilation failed.
     pause

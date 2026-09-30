@@ -1,0 +1,12 @@
+# Java build output
+out/
+*.class
+
+# Local exports and logs
+*.csv
+*.log
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example

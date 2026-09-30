@@ -15,20 +15,26 @@ final class PlacementUi {
         table.setRowHeight(38);
         table.setShowVerticalLines(true);
         table.setShowHorizontalLines(true);
-        table.setGridColor(new Color(238, 240, 244));
+        table.setShowGrid(true);
+        table.setGridColor(new Color(232, 237, 244));
         table.setSelectionBackground(CampusPlacementSystem.C_ROW_SEL);
         table.setSelectionForeground(CampusPlacementSystem.C_DARK_TXT);
         table.setBackground(CampusPlacementSystem.C_SURFACE);
         table.setFillsViewportHeight(true);
-        table.getTableHeader().setReorderingAllowed(true);
+        table.setRowHeight(42);
+        table.setIntercellSpacing(new Dimension(0, 1));
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setFillsViewportHeight(true);
+        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        table.getTableHeader().setReorderingAllowed(false);
 
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        header.setBackground(CampusPlacementSystem.C_HDR);
-        header.setForeground(CampusPlacementSystem.C_WHITE);
-        header.setPreferredSize(new Dimension(0, 44));
-        header.setBorder(BorderFactory.createMatteBorder(
-                0, 0, 2, 0, CampusPlacementSystem.C_INDIGO));
+        header.setBackground(new Color(245, 247, 251));
+        header.setForeground(new Color(71, 85, 105));
+        header.setPreferredSize(new Dimension(0, 42));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0,
+                new Color(226, 232, 240)));
 
         int[] widths = {42, 152, 88, 138, 120, 100, 110};
         for (int i = 0; i < widths.length && i < table.getColumnCount(); i++) {
@@ -120,8 +126,10 @@ final class PlacementUi {
         field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         field.setBackground(CampusPlacementSystem.C_DARK_FLD);
-        field.setForeground(CampusPlacementSystem.C_WHITE);
+        field.setForeground(CampusPlacementSystem.C_DARK_TXT);
         field.setCaretColor(CampusPlacementSystem.C_INDIGO);
+        field.setSelectionColor(new Color(199, 210, 254));
+        field.setSelectedTextColor(CampusPlacementSystem.C_DARK_TXT);
         field.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(CampusPlacementSystem.C_DARK_BDR, 1, true),
                 new EmptyBorder(0, 10, 0, 10)));
@@ -139,7 +147,7 @@ final class PlacementUi {
     static JLabel mkDkLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(CampusPlacementSystem.F_LABEL);
-        label.setForeground(new Color(148, 163, 184));
+        label.setForeground(new Color(71, 85, 105));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
@@ -149,7 +157,7 @@ final class PlacementUi {
         combo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         combo.setAlignmentX(Component.LEFT_ALIGNMENT);
         combo.setBackground(CampusPlacementSystem.C_DARK_FLD);
-        combo.setForeground(CampusPlacementSystem.C_WHITE);
+        combo.setForeground(CampusPlacementSystem.C_DARK_TXT);
         combo.setBorder(BorderFactory.createLineBorder(CampusPlacementSystem.C_DARK_BDR, 1));
         combo.setRenderer(new DefaultListCellRenderer() {
             @Override public Component getListCellRendererComponent(
@@ -157,9 +165,33 @@ final class PlacementUi {
                 JLabel label = (JLabel) super.getListCellRendererComponent(
                         list, value, index, selected, hasFocus);
                 label.setBackground(selected
-                        ? CampusPlacementSystem.C_INDIGO : new Color(22, 27, 34));
-                label.setForeground(CampusPlacementSystem.C_WHITE);
+                        ? new Color(238, 242, 255) : CampusPlacementSystem.C_SURFACE);
+                label.setForeground(selected
+                        ? CampusPlacementSystem.C_INDIGO2 : CampusPlacementSystem.C_DARK_TXT);
                 label.setBorder(new EmptyBorder(5, 10, 5, 10));
+                return label;
+            }
+
+        });
+    }
+
+    static void styleFilterCombo(JComboBox<String> combo) {
+        combo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        combo.setForeground(CampusPlacementSystem.C_DARK_TXT);
+        combo.setBackground(new Color(248, 250, 252));
+        combo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(226, 232, 240), 1, true),
+                new EmptyBorder(2, 7, 2, 7)));
+        combo.setRenderer(new DefaultListCellRenderer() {
+            @Override public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean selected, boolean hasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(
+                        list, value, index, selected, hasFocus);
+                label.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                label.setBackground(selected ? new Color(238, 242, 255) : Color.WHITE);
+                label.setForeground(selected
+                        ? CampusPlacementSystem.C_INDIGO2 : CampusPlacementSystem.C_DARK_TXT);
+                label.setBorder(new EmptyBorder(5, 8, 5, 8));
                 return label;
             }
         });
@@ -228,8 +260,8 @@ final class PlacementUi {
         g2.setColor(CampusPlacementSystem.C_INDIGO);
         g2.fillRoundRect(0, 0, 64, 64, 16, 16);
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36));
-        g2.drawString("🎓", 10, 46);
+        g2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        g2.drawString("CP", 13, 39);
         g2.dispose();
         return image;
     }

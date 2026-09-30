@@ -31,8 +31,14 @@ final class PlacementSplash {
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        JLabel icon = new JLabel("🎓", SwingConstants.CENTER);
-        icon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 60));
+        JLabel icon = new JLabel("CP", SwingConstants.CENTER);
+        icon.setFont(new Font("Segoe UI", Font.BOLD, 42));
+        icon.setForeground(new Color(248, 250, 252));
+        icon.setOpaque(true);
+        icon.setBackground(new Color(99, 102, 241));
+        icon.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(129, 140, 248), 1, true),
+                new EmptyBorder(8, 18, 8, 18)));
         icon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel title = new JLabel("Campus Placement Management System", SwingConstants.CENTER);

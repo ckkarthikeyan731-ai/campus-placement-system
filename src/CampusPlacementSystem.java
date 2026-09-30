@@ -13,7 +13,7 @@ import java.util.*;
  *  Author  : Karthikeyan C K | Roll No: 25IT347
  *  College : St. Joseph's College of Engineering
  *  Stack   : Core Java + Swing + AWT + JDBC (MySQL)
- *  Version : 2.0 — Enterprise Edition
+ *  Version : 2.0
  * ============================================================
  */
 public class CampusPlacementSystem extends JFrame {
@@ -32,7 +32,7 @@ public class CampusPlacementSystem extends JFrame {
 
     // ─── Colour Palette — Premium Dark/Light Hybrid ───────────
     static final Color C_DARK     = new Color(13,  17,  23);
-    static final Color C_SIDEBAR  = new Color(22,  27,  34);
+    static final Color C_SIDEBAR  = new Color(248, 250, 252);
     static final Color C_SURFACE  = new Color(255, 255, 255);
     static final Color C_CARD     = new Color(246, 248, 250);
     static final Color C_BORDER   = new Color(208, 215, 222);
@@ -52,8 +52,8 @@ public class CampusPlacementSystem extends JFrame {
     static final Color C_HDR      = new Color(33,  38,  45);
     static final Color C_ROW_SEL  = new Color(225, 239, 255);
     static final Color C_ROW_ALT  = new Color(252, 253, 254);
-    static final Color C_DARK_BDR = new Color(48,  54,  61);
-    static final Color C_DARK_FLD = new Color(13,  17,  23);
+    static final Color C_DARK_BDR = new Color(203, 213, 225);
+    static final Color C_DARK_FLD = new Color(255, 255, 255);
 
     // ─── Fonts ────────────────────────────────────────────────
     static final Font F_HEAD  = new Font("Segoe UI", Font.BOLD,  15);
@@ -151,6 +151,7 @@ public class CampusPlacementSystem extends JFrame {
         setSize(1366, 860);
         setMinimumSize(new Dimension(1000, 620));
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconImage(PlacementUi.buildIcon());
 
         cardPanel.add(buildLogin(),     "LOGIN");
@@ -185,8 +186,14 @@ public class CampusPlacementSystem extends JFrame {
         brand.setOpaque(false);
         brand.setLayout(new BoxLayout(brand, BoxLayout.Y_AXIS));
 
-        JLabel ico = new JLabel("🎓", SwingConstants.CENTER);
-        ico.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 72));
+        JLabel ico = new JLabel("CP", SwingConstants.CENTER);
+        ico.setFont(new Font("Segoe UI", Font.BOLD, 42));
+        ico.setForeground(C_WHITE);
+        ico.setOpaque(true);
+        ico.setBackground(C_INDIGO);
+        ico.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(129, 140, 248), 1, true),
+                new EmptyBorder(10, 22, 10, 22)));
         ico.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel t1 = new JLabel("Campus Placement", SwingConstants.CENTER);
@@ -208,10 +215,10 @@ public class CampusPlacementSystem extends JFrame {
 
         // Feature bullets
         String[][] feats = {
-            {"📋", "Manage student placement records"},
-            {"🔍", "Search, filter and sort data live"},
-            {"📊", "Live KPI statistics dashboard"},
-            {"📥", "Export records to CSV instantly"},
+            {"01", "Manage student placement records"},
+            {"02", "Search, filter and sort records"},
+            {"03", "Track placement outcomes"},
+            {"04", "Export records to CSV"},
         };
         for (String[] f : feats) {
             JPanel row = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 0));
@@ -261,7 +268,7 @@ public class CampusPlacementSystem extends JFrame {
                 new Color(238, 242, 255), new Color(199, 210, 254));
         badge.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel welcome = new JLabel("Welcome Back 👋");
+        JLabel welcome = new JLabel("Welcome back");
         welcome.setFont(new Font("Segoe UI", Font.BOLD, 26));
         welcome.setForeground(C_DARK_TXT);
         welcome.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -300,8 +307,8 @@ public class CampusPlacementSystem extends JFrame {
         loginPass.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(C_BORDER, 1, true),
                 new EmptyBorder(0, 12, 0, 6)));
-        JButton eyeBtn = new JButton("👁");
-        eyeBtn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
+        JButton eyeBtn = new JButton("Show");
+        eyeBtn.setFont(new Font("Segoe UI", Font.BOLD, 11));
         eyeBtn.setBackground(new Color(249, 250, 251));
         eyeBtn.setFocusPainted(false);
         eyeBtn.setBorderPainted(false);
@@ -313,7 +320,7 @@ public class CampusPlacementSystem extends JFrame {
         eyeBtn.addActionListener(e -> {
             passShown = !passShown;
             loginPass.setEchoChar(passShown ? '\0' : '•');
-            eyeBtn.setText(passShown ? "🙈" : "👁");
+            eyeBtn.setText(passShown ? "Hide" : "Show");
         });
         passRow.add(loginPass, BorderLayout.CENTER);
         passRow.add(eyeBtn,    BorderLayout.EAST);
@@ -415,13 +422,18 @@ public class CampusPlacementSystem extends JFrame {
     private JPanel buildHeader() {
         JPanel h = new JPanel(new BorderLayout());
         h.setBackground(C_DARK);
-        h.setBorder(new EmptyBorder(12, 24, 12, 24));
-        h.setPreferredSize(new Dimension(0, 66));
+        h.setBorder(new EmptyBorder(13, 24, 13, 24));
+        h.setPreferredSize(new Dimension(0, 72));
 
         JPanel lft = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         lft.setOpaque(false);
-        JLabel ic = new JLabel("🎓");
-        ic.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 30));
+        JLabel ic = new JLabel("CP", SwingConstants.CENTER);
+        ic.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        ic.setForeground(Color.WHITE);
+        ic.setOpaque(true);
+        ic.setBackground(C_INDIGO);
+        ic.setPreferredSize(new Dimension(42, 42));
+        ic.setBorder(BorderFactory.createLineBorder(new Color(129, 140, 248), 1, true));
         JPanel tb = new JPanel();
         tb.setOpaque(false);
         tb.setLayout(new BoxLayout(tb, BoxLayout.Y_AXIS));
@@ -464,12 +476,12 @@ public class CampusPlacementSystem extends JFrame {
         kpiAvg    = new JLabel("—");
         kpiTop    = new JLabel("—");
 
-        row.add(mkKpiCard("Total Students", kpiTotal,  "👥", C_INDIGO,  new Color(238, 242, 255)));
-        row.add(mkKpiCard("Placed",         kpiPlaced, "✅", C_GREEN,   new Color(240, 253, 244)));
-        row.add(mkKpiCard("Not Placed",     kpiNot,    "❌", C_RED,     new Color(254, 242, 242)));
-        row.add(mkKpiCard("In Progress", kpiInProgress, "⏳", C_TEAL,    new Color(236, 254, 255)));
-        row.add(mkKpiCard("Avg Placed Package", kpiAvg, "💰", C_AMBER,  new Color(255, 251, 235)));
-        row.add(mkKpiCard("Top Placed Package", kpiTop, "🏆", C_PURPLE, new Color(250, 245, 255)));
+        row.add(mkKpiCard("Total Students", kpiTotal,  "ALL", C_INDIGO,  new Color(238, 242, 255)));
+        row.add(mkKpiCard("Placed",         kpiPlaced, "YES", C_GREEN,   new Color(240, 253, 244)));
+        row.add(mkKpiCard("Not Placed",     kpiNot,    "NO", C_RED,      new Color(254, 242, 242)));
+        row.add(mkKpiCard("In Progress", kpiInProgress, "IP", C_TEAL,    new Color(236, 254, 255)));
+        row.add(mkKpiCard("Avg. placed LPA", kpiAvg, "AVG", C_AMBER,    new Color(255, 251, 235)));
+        row.add(mkKpiCard("Top placed LPA", kpiTop, "TOP", C_PURPLE,    new Color(250, 245, 255)));
         return row;
     }
 
@@ -478,15 +490,15 @@ public class CampusPlacementSystem extends JFrame {
         card.setBackground(C_SURFACE);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(226, 232, 240), 1, true),
-                new EmptyBorder(13, 13, 13, 13)));
+                new EmptyBorder(14, 14, 14, 14)));
         card.setToolTipText(title + " placement metric");
 
         // Icon circle
         JLabel icoLbl = new JLabel(icon, SwingConstants.CENTER);
-        icoLbl.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+        icoLbl.setFont(new Font("Segoe UI", Font.BOLD, 11));
         JPanel icoBox = new JPanel(new GridBagLayout());
         icoBox.setBackground(iconBg);
-        icoBox.setPreferredSize(new Dimension(48, 48));
+        icoBox.setPreferredSize(new Dimension(46, 46));
         icoBox.setBorder(BorderFactory.createLineBorder(new Color(
                 accent.getRed(), accent.getGreen(), accent.getBlue(), 80), 1, true));
         icoBox.add(icoLbl);
@@ -494,7 +506,7 @@ public class CampusPlacementSystem extends JFrame {
         JPanel info = new JPanel();
         info.setOpaque(false);
         info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
-        valLbl.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        valLbl.setFont(new Font("Segoe UI", Font.BOLD, 23));
         valLbl.setForeground(accent);
         JLabel titleLbl = new JLabel(title);
         titleLbl.setFont(F_SMALL);
@@ -536,19 +548,25 @@ public class CampusPlacementSystem extends JFrame {
         JPanel formContent = new JPanel();
         formContent.setBackground(C_SIDEBAR);
         formContent.setLayout(new BoxLayout(formContent, BoxLayout.Y_AXIS));
-        formContent.setBorder(new EmptyBorder(20, 18, 18, 18));
+        formContent.setBorder(new EmptyBorder(22, 20, 20, 20));
         formContent.setPreferredSize(new Dimension(360, 620));
 
-        lblFormHead = new JLabel("➕  Add New Record");
+        lblFormHead = new JLabel("New placement record");
         lblFormHead.setFont(F_HEAD);
-        lblFormHead.setForeground(C_WHITE);
+        lblFormHead.setForeground(C_DARK_TXT);
         lblFormHead.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel formHint = new JLabel("Add a student or select a row to edit");
+        formHint.setFont(F_SMALL);
+        formHint.setForeground(C_MUTED);
+        formHint.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JSeparator sep = new JSeparator();
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-        sep.setForeground(new Color(40, 46, 56));
+        sep.setForeground(new Color(226, 232, 240));
         formContent.add(lblFormHead);
-        formContent.add(Box.createVerticalStrut(8));
+        formContent.add(Box.createVerticalStrut(4));
+        formContent.add(formHint);
+        formContent.add(Box.createVerticalStrut(12));
         formContent.add(sep);
         formContent.add(Box.createVerticalStrut(16));
 
@@ -581,10 +599,10 @@ public class CampusPlacementSystem extends JFrame {
         btnGrid.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnGrid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 96));
 
-        JButton btnAdd    = PlacementUi.mkBtn("➕  Add",    C_GREEN,  C_GREEN2);
-        JButton btnUpdate = PlacementUi.mkBtn("✏  Update", C_INDIGO, C_INDIGO2);
-        JButton btnDelete = PlacementUi.mkBtn("🗑  Delete", C_RED,    C_RED2);
-        JButton btnClear  = PlacementUi.mkBtn("✖  Clear",  new Color(71, 85, 105), new Color(51, 65, 85));
+        JButton btnAdd    = PlacementUi.mkBtn("Add record",    C_GREEN,  C_GREEN2);
+        JButton btnUpdate = PlacementUi.mkBtn("Save changes", C_INDIGO, C_INDIGO2);
+        JButton btnDelete = PlacementUi.mkBtn("Delete", C_RED,    C_RED2);
+        JButton btnClear  = PlacementUi.mkBtn("Clear form",  new Color(71, 85, 105), new Color(51, 65, 85));
 
         btnGrid.add(btnAdd);
         btnGrid.add(btnUpdate);
@@ -594,9 +612,9 @@ public class CampusPlacementSystem extends JFrame {
 
         // Export button
         formContent.add(Box.createVerticalStrut(10));
-        JButton btnExport = PlacementUi.mkBtn("📥  Export to CSV", C_TEAL, C_TEAL2);
+        JButton btnExport = PlacementUi.mkBtn("Export visible records to CSV", C_TEAL, C_TEAL2);
         btnExport.setAlignmentX(Component.LEFT_ALIGNMENT);
-        btnExport.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+        btnExport.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         formContent.add(btnExport);
 
         // Actions
@@ -617,6 +635,7 @@ public class CampusPlacementSystem extends JFrame {
         JPanel formPanel = new JPanel(new BorderLayout());
         formPanel.setBackground(C_SIDEBAR);
         formPanel.setPreferredSize(new Dimension(388, 0));
+        formPanel.setBorder(new MatteBorder(0, 0, 0, 1, C_BORDER));
         formPanel.add(formScroll, BorderLayout.CENTER);
         return formPanel;
     }
@@ -627,28 +646,43 @@ public class CampusPlacementSystem extends JFrame {
         panel.setBackground(C_SURFACE);
 
         // ─ Toolbar
-        JPanel toolbar = new JPanel(new BorderLayout(10, 0));
+        JPanel toolbar = new JPanel();
         toolbar.setBackground(C_SURFACE);
-        toolbar.setBorder(new EmptyBorder(14, 16, 10, 16));
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
+        toolbar.setBorder(new EmptyBorder(14, 18, 12, 18));
 
-        JLabel tblTitle = new JLabel("📋  Placement Records");
-        tblTitle.setFont(F_HEAD);
+        JLabel tblTitle = new JLabel("Placement records");
+        tblTitle.setFont(new Font("Segoe UI", Font.BOLD, 17));
         tblTitle.setForeground(C_DARK_TXT);
+        JLabel tableSubtitle = new JLabel("Search, filter and manage student outcomes");
+        tableSubtitle.setFont(F_SMALL);
+        tableSubtitle.setForeground(C_MUTED);
+        JPanel titleGroup = new JPanel();
+        titleGroup.setOpaque(false);
+        titleGroup.setLayout(new BoxLayout(titleGroup, BoxLayout.Y_AXIS));
+        titleGroup.add(tblTitle);
+        titleGroup.add(Box.createVerticalStrut(3));
+        titleGroup.add(tableSubtitle);
 
-        JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         controls.setOpaque(false);
 
         // Search box
-        JPanel searchBox = new JPanel(new BorderLayout());
-        searchBox.setBackground(C_SURFACE);
-        searchBox.setBorder(BorderFactory.createLineBorder(C_BORDER, 1, true));
-        JLabel searchIco = new JLabel(" 🔍 ");
-        searchIco.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 12));
-        searchIco.setBackground(C_SURFACE);
-        searchIco.setOpaque(true);
-        searchField = new JTextField(13);
+        JPanel searchBox = new JPanel(new BorderLayout(8, 0));
+        searchBox.setBackground(new Color(248, 250, 252));
+        searchBox.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(226, 232, 240), 1, true),
+                new EmptyBorder(0, 10, 0, 10)));
+        JLabel searchIco = new JLabel("Search");
+        searchIco.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        searchIco.setForeground(C_MUTED);
+        searchField = new JTextField(20);
+        searchField.setPreferredSize(new Dimension(240, 36));
         searchField.setFont(F_BODY);
-        searchField.setBorder(new EmptyBorder(4, 2, 4, 8));
+        searchField.setBackground(new Color(248, 250, 252));
+        searchField.setForeground(C_DARK_TXT);
+        searchField.setCaretColor(C_INDIGO);
+        searchField.setBorder(new EmptyBorder(7, 2, 7, 2));
         searchField.setToolTipText("Search by name, roll, company...");
         searchBox.add(searchIco,   BorderLayout.WEST);
         searchBox.add(searchField, BorderLayout.CENTER);
@@ -657,26 +691,31 @@ public class CampusPlacementSystem extends JFrame {
         filterDept = new JComboBox<>(new String[]{
             "All Departments", "Computer Science", "Information Tech",
             "Electronics", "Mechanical", "Civil Engineering", "IT"});
-        filterDept.setFont(F_SMALL);
-        filterDept.setPreferredSize(new Dimension(148, 30));
+        PlacementUi.styleFilterCombo(filterDept);
+        filterDept.setPreferredSize(new Dimension(160, 36));
 
         // Status filter
         filterStatus = new JComboBox<>(new String[]{
             "All Status", "Placed", "Not Placed", "In Process", "On Hold"});
-        filterStatus.setFont(F_SMALL);
-        filterStatus.setPreferredSize(new Dimension(118, 30));
+        PlacementUi.styleFilterCombo(filterStatus);
+        filterStatus.setPreferredSize(new Dimension(132, 36));
 
-        JButton btnRefresh = PlacementUi.mkBtn("⟳", C_TEAL, C_TEAL2);
-        btnRefresh.setPreferredSize(new Dimension(36, 30));
+        JButton btnRefresh = PlacementUi.mkBtn("Refresh", C_TEAL, C_TEAL2);
+        btnRefresh.setPreferredSize(new Dimension(82, 36));
         btnRefresh.addActionListener(e -> { loadTableData(); applyFilter(); });
 
         controls.add(searchBox);
         controls.add(filterDept);
         controls.add(filterStatus);
-        controls.add(btnRefresh);
 
-        toolbar.add(tblTitle,  BorderLayout.WEST);
-        toolbar.add(controls,  BorderLayout.EAST);
+        JPanel titleRow = new JPanel(new BorderLayout());
+        titleRow.setOpaque(false);
+        titleRow.setBorder(new EmptyBorder(0, 0, 10, 0));
+        titleRow.add(titleGroup, BorderLayout.WEST);
+        titleRow.add(btnRefresh, BorderLayout.EAST);
+        controls.setAlignmentX(Component.LEFT_ALIGNMENT);
+        toolbar.add(titleRow);
+        toolbar.add(controls);
         panel.add(toolbar, BorderLayout.NORTH);
 
         // ─ Table
@@ -711,7 +750,7 @@ public class CampusPlacementSystem extends JFrame {
         lblStatus.setFont(F_SMALL);
         lblStatus.setForeground(C_MUTED);
         JLabel copy = new JLabel(
-            "Campus Placement System  ·  Karthikeyan C K  ·  25IT347  ·  St. Joseph's College of Engineering   ");
+            "Karthikeyan C K  ·  25IT347  ·  St. Joseph's College of Engineering   ");
         copy.setFont(new Font("Segoe UI", Font.PLAIN, 10));
         copy.setForeground(new Color(190, 200, 210));
         statusBar.add(lblStatus, BorderLayout.WEST);
@@ -877,7 +916,7 @@ public class CampusPlacementSystem extends JFrame {
             ps.setString(5, (String) cbStatus.getSelectedItem());
             ps.setDouble(6, Double.parseDouble(fPkg.getText().trim()));
             if (ps.executeUpdate() > 0) {
-                showOk("Record Added", "✅ Placement record added successfully!");
+                showOk("Record Added", "Placement record added successfully.");
                 clearForm();
                 loadTableData();
                 applyFilter();
@@ -908,7 +947,7 @@ public class CampusPlacementSystem extends JFrame {
             ps.setDouble(6, Double.parseDouble(fPkg.getText().trim()));
             ps.setInt(7, selectedId);
             if (ps.executeUpdate() > 0) {
-                showOk("Record Updated", "✏  Record updated successfully!");
+                showOk("Record Updated", "Record updated successfully.");
                 clearForm();
                 loadTableData();
                 applyFilter();
@@ -934,7 +973,7 @@ public class CampusPlacementSystem extends JFrame {
         try (Connection c = conn(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, selectedId);
             if (ps.executeUpdate() > 0) {
-                showOk("Deleted", "🗑  Record deleted successfully!");
+                showOk("Deleted", "Record deleted successfully.");
                 clearForm();
                 loadTableData();
                 applyFilter();
@@ -985,7 +1024,7 @@ public class CampusPlacementSystem extends JFrame {
                 pw.println(sb);
             }
             showOk("Export Successful",
-                "✅ Data exported successfully!\n\nFile saved at:\n" + exportFile.getAbsolutePath());
+                "Data exported successfully.\n\nFile saved at:\n" + exportFile.getAbsolutePath());
             lblStatus.setText("  Exported to " + exportFile.getName());
         } catch (IOException ex) {
             showErr("Export Failed", "Could not write file.\n\n" + ex.getMessage());
@@ -1015,7 +1054,7 @@ public class CampusPlacementSystem extends JFrame {
         fCompany.setText((String) tableModel.getValueAt(mr, 4));
         cbStatus.setSelectedItem( tableModel.getValueAt(mr, 5));
         fPkg.setText(String.valueOf(tableModel.getValueAt(mr, 6)));
-        lblFormHead.setText("✏  Edit Record  (ID: " + selectedId + ")");
+        lblFormHead.setText("Edit placement  ·  ID " + selectedId);
         resetAllBorders();
     }
 
@@ -1023,7 +1062,7 @@ public class CampusPlacementSystem extends JFrame {
         selectedId = -1;
         fName.setText(""); fRoll.setText(""); fDept.setText("");
         fCompany.setText(""); cbStatus.setSelectedIndex(0); fPkg.setText("");
-        lblFormHead.setText("➕  Add New Record");
+        lblFormHead.setText("New placement record");
         table.clearSelection();
         resetAllBorders();
         fName.requestFocus();

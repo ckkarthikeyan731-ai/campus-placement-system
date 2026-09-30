@@ -41,14 +41,13 @@ Package KPIs use records with status **Placed**. Search and filters change the t
 
    Enter your MySQL password when prompted. If `mysql` is not recognized, open MySQL Command Line Client or add the MySQL `bin` folder to `PATH`, then run this command again.
 
-3. Configure the app's database connection in the same Command Prompt window:
+3. If your MySQL username is not `root`, configure it in the same Command Prompt window:
 
    ```cmd
-   set CPS_DB_USER=root
-   set CPS_DB_PASS=your_mysql_password
+   set CPS_DB_USER=your_mysql_username
    ```
 
-   Replace the example with your MySQL password. Optionally set `CPS_DB_URL` to override the default JDBC URL. These variables are read by the application and are not stored in source control.
+   Optionally set `CPS_DB_URL` to override the default JDBC URL. If `CPS_DB_PASS` is set, the app uses it. Otherwise, when the app starts, it asks for the MySQL database password in a separate secure password field. This is not the application sign-in password.
 
 4. Start the app from the repository folder:
 
@@ -56,7 +55,7 @@ Package KPIs use records with status **Placed**. Search and filters change the t
    run.bat
    ```
 
-   This compiles the Java source and opens the desktop application. If you are not in the repository folder, run the batch file using its full path instead.
+   This compiles the Java source and opens the desktop application. If you are not in the repository folder, run the batch file using its full path instead. The app displays the sign-in screen without attempting a database read first.
 
 5. Sign in with the development account created by the SQL script:
 

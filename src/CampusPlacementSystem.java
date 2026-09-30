@@ -23,7 +23,7 @@ public class CampusPlacementSystem extends JFrame {
             "jdbc:mysql://localhost:3306/campus_placement_db" +
                     "?useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true");
     private static final String DB_USER = setting("CPS_DB_USER", "root");
-    private static final String DB_PASS = setting("CPS_DB_PASS", "");
+    private static String dbPass = System.getenv("CPS_DB_PASS");
 
     private static String setting(String name, String defaultValue) {
         String value = System.getenv(name);
@@ -107,7 +107,32 @@ public class CampusPlacementSystem extends JFrame {
                 "Driver Missing", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-        SwingUtilities.invokeLater(CampusPlacementSystem::showSplash);
+        SwingUtilities.invokeLater(() -> {
+            if (!configureDatabasePassword()) {
+                return;
+            }
+            showSplash();
+        });
+    }
+
+    private static boolean configureDatabasePassword() {
+        if (dbPass != null) {
+            return true;
+        }
+
+        JPasswordField passwordField = new JPasswordField(22);
+        JPanel prompt = new JPanel(new BorderLayout(0, 8));
+        prompt.add(new JLabel("Enter your MySQL database password (not the app login password):"),
+                BorderLayout.NORTH);
+        prompt.add(passwordField, BorderLayout.CENTER);
+
+        int choice = JOptionPane.showConfirmDialog(null, prompt,
+                "Database Connection", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (choice != JOptionPane.OK_OPTION) {
+            return false;
+        }
+        dbPass = new String(passwordField.getPassword());
+        return true;
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -688,7 +713,6 @@ public class CampusPlacementSystem extends JFrame {
         filterDept.addActionListener(e -> applyFilter());
         filterStatus.addActionListener(e -> applyFilter());
 
-        loadTableData();
         return panel;
     }
 
@@ -729,7 +753,7 @@ public class CampusPlacementSystem extends JFrame {
     //  JDBC OPERATIONS
     // ═══════════════════════════════════════════════════════════
     private Connection conn() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        return DriverManager.getConnection(DB_URL, DB_USER, dbPass == null ? "" : dbPass);
     }
 
     /** Login validation */
@@ -748,22 +772,29 @@ public class CampusPlacementSystem extends JFrame {
                 if (rs.next()) {
                     loginUser.setText("");
                     loginPass.setText("");
-                    loadTableData();
+                    if (!loadTableData()) {
+                        return;
+                    }
                     cardLayout.show(cardPanel, "DASHBOARD");
                 } else {
                     showErr("Login Failed", "Invalid username or password.\nPlease try again.");
                 }
             }
         } catch (SQLException ex) {
-            showErr("DB Error", "Cannot connect to database.\n\n" + ex.getMessage());
+            showErr("Database Connection Failed",
+                    "Cannot connect to MySQL using " + DB_USER + " at localhost:3306.\n\n"
+                    + "Check that MySQL is running, database_setup.sql has been executed, "
+                    + "and your MySQL username/password are correct.\n"
+                    + "You can set CPS_DB_USER and CPS_DB_PASS in the same Command Prompt "
+                    + "before running run.bat.\n\nDetails: " + ex.getMessage());
         }
     }
 
     /** Load/refresh all table data */
-    private void loadTableData() {
-        tableModel.setRowCount(0);
+    private boolean loadTableData() {
         String sql = "SELECT id,student_name,roll_no,department,company,status,package_lpa " +
                      "FROM placement_records ORDER BY id";
+        java.util.List<Object[]> records = new ArrayList<>();
         int total = 0, placed = 0, notPlaced = 0;
         double placedPkg = 0, topPlacedPkg = 0;
         try (Connection c = conn();
@@ -778,7 +809,7 @@ public class CampusPlacementSystem extends JFrame {
                 String co   = rs.getString("company");
                 String st   = rs.getString("status");
                 double pkg  = rs.getDouble("package_lpa");
-                tableModel.addRow(new Object[]{id, name, roll, dept, co, st, pkg});
+                records.add(new Object[]{id, name, roll, dept, co, st, pkg});
                 total++;
                 if ("Placed".equalsIgnoreCase(st)) {
                     placed++;
@@ -787,6 +818,10 @@ public class CampusPlacementSystem extends JFrame {
                 } else if ("Not Placed".equalsIgnoreCase(st)) {
                     notPlaced++;
                 }
+            }
+            tableModel.setRowCount(0);
+            for (Object[] record : records) {
+                tableModel.addRow(record);
             }
             final int    T  = total, PL = placed, NP = notPlaced;
             final String AV = placed > 0 ? String.format("%.1f", placedPkg / placed) + " LPA" : "—";
@@ -802,8 +837,13 @@ public class CampusPlacementSystem extends JFrame {
                 kpiPlacementRate.setText(placementRate + "% of students placed");
                 if (lblStatus != null) lblStatus.setText("  " + T + " total record(s)");
             });
+            return true;
         } catch (SQLException ex) {
-            showErr("Load Error", "Failed to load records.\n\n" + ex.getMessage());
+            showErr("Database Connection Failed",
+                    "Could not load placement records. Check that MySQL is running, the database "
+                    + "is set up, and the configured MySQL username and password are correct.\n\n"
+                    + "Details: " + ex.getMessage());
+            return false;
         }
     }
 
